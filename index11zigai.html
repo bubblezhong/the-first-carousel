@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>轮播图</title>
+	<style>
+	*{margin: 0px;
+		padding: 0px;
+	}
+	#box{
+		width: 470px;
+		height: 150px;
+		margin: 50px auto;
+		overflow: hidden;
+        position: relative;          
+	}
+	#box ul {
+		position: absolute;
+		
+	}
+	#box ul li {
+		list-style: none;
+		width: 470px;
+		height: 150px;
+	}
+	#box ol{position: absolute;right: 20px;bottom:10px;}
+	#box ol li {
+		      list-style: none;
+              float: left;
+              margin-left: 15px;
+              background:#fff;
+              padding: 5px;
+              color: #f60; 
+
+	}
+	#box ol li.active{
+		color: #fff;
+		background-color: #f60;
+
+	}
+	.arrow{cursor:pointer; display: none;line-height: 39px;text-align: center;font-size: 36px;
+	       font-weight: bold;width: 40px;height: 40px;position:absolute;z-index: 2;top: 50px;
+	       background-color: rgba(255,255,255,.3);color: #000;}
+	#box:hover .arrow{background-color: rgba(255,255,255,.7);display: block;}       
+    #prev{left: 20px;}
+	#next{right: 20px;}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<ul style="top: -150px;">
+		    <li><img src="images/5.jpg" alt="5"></li>
+			<li ><img src="images/1.jpg" alt="1"></li>
+			<li><img src="images/2.jpg" alt="2"></li>
+			<li><img src="images/3.jpg" alt="3"></li>
+			<li><img src="images/4.jpg" alt="4"></li>
+			<li><img src="images/5.jpg" alt="5"></li>
+			<li ><img src="images/1.jpg" alt="1"></li>
+		</ul>
+		<ol>
+			<li class="active" >1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ol>
+		<a href="javascript: ;" class="arrow" id="prev">&lt</a>
+		<a href="javascript: ;" class="arrow" id="next">&gt</a>
+	</div>
+</body>
+<script type="text/javascript" src="jquery-1.11.3.js"></script>
+<script>
+	$(function(){
+         var picList = $("#box ul li"),
+             ul=$("#box ul"),
+             olList = $("#box ol li"),
+             imgHeight = picList.outerHeight(),
+             iNow=1,
+             timer=null,
+             prev=$("#box a#prev"),
+             next=$("#box a#next"); 
+         olList.on('mouseover',function(){
+         	$(this).addClass("active").siblings().removeClass('active');
+         	var index = $(this).index();
+         	iNow=index+1;
+         	console.log(index);
+         	// picList.eq(index).fadeIn().siblings().hide();
+            clearInterval(timer);
+         	ul.stop(true,true).animate({top:-iNow*imgHeight},500);
+           });
+         
+         ul.on('mouseover',function(){
+         	clearInterval(timer);
+         });
+
+         ul.on('mouseleave',function(){
+         	
+          //鼠标离开图片或者序号上时，开始图片滚动
+         	timer=setInterval(doRun,2000);
+         });
+          //当页面载入是自动执行图片滚动
+          timer = setInterval(doRun,2000);
+         function doRun(){
+         	iNow=iNow+1;
+         	 	if(iNow==picList.length){
+         		iNow=1;
+         		ul.css({top:-iNow*imgHeight+"px"});
+         		iNow=2;
+         	   }
+         	ul.animate({top:-iNow*imgHeight+"px"},500);
+         	if(iNow==6){
+         		newList=1;
+         	}else{
+         		newList=iNow;
+         	}
+         	olList.eq(newList-1).addClass('active').siblings('').removeClass("active");
+         }
+         next.on("click",function(){
+         	doRun();
+         });
+         next.on("mouseover",function(){
+         	clearInterval(timer);
+         });
+        prev.on("click",function(){
+        	iNow--;
+        	if(iNow==-1){
+        		iNow=5;
+        		ul.css({top:-iNow*imgHeight+'px'});
+        		iNow=4;
+        	}
+        	ul.animate({top:-iNow*imgHeight+'px'},500);
+        	if(iNow==0){
+                 newList=5;    
+        	}else{
+        		newList=iNow;
+        	}
+        	olList.eq(newList-1).addClass('active').siblings('').removeClass("active");
+        });
+        prev.on("mouseover",function(){
+        	clearInterval(timer);
+        });
+     })
+         	
+         	 
+         		
+         	
+         	
+         
+</script>	
+
+</html>
+
+
+
